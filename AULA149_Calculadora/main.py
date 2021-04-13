@@ -33,7 +33,12 @@ class Calculadora(QMainWindow):
         self.add_btn(QPushButton('5'), 2, 1, 1, 1)
         self.add_btn(QPushButton('6'), 2, 2, 1, 1)
         self.add_btn(QPushButton('-'), 2, 3, 1, 1)
-        self.add_btn(QPushButton('<-'), 2, 4, 1, 1)
+        self.add_btn(
+            QPushButton('<-'), 2, 4, 1, 1,
+            lambda: self.display.setText(
+                self.display.text()[:-1]
+            )
+        )
 
         self.add_btn(QPushButton('1'), 3, 0, 1, 1)
         self.add_btn(QPushButton('2'), 3, 1, 1, 1)
