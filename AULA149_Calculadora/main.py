@@ -26,7 +26,8 @@ class Calculadora(QMainWindow):
         self.add_btn(QPushButton('+'), 1, 3, 1, 1)
         self.add_btn(
             QPushButton('C'), 1, 4, 1, 1,
-            lambda: self.display.setText('')
+            lambda: self.display.setText(''),
+            'background: #ff8c00; color: white; font-weight: bold; border: none; border-radius: 5px'
         )
 
         self.add_btn(QPushButton('4'), 2, 0, 1, 1)
@@ -34,31 +35,37 @@ class Calculadora(QMainWindow):
         self.add_btn(QPushButton('6'), 2, 2, 1, 1)
         self.add_btn(QPushButton('-'), 2, 3, 1, 1)
         self.add_btn(
-            QPushButton('<-'), 2, 4, 1, 1,
+            QPushButton('<--'), 2, 4, 1, 1,
             lambda: self.display.setText(
                 self.display.text()[:-1]
-            )
+            ),
+            'background: #483d8b; color: white; font-weight: bold; border: none; border-radius: 5px'
         )
 
         self.add_btn(QPushButton('1'), 3, 0, 1, 1)
         self.add_btn(QPushButton('2'), 3, 1, 1, 1)
         self.add_btn(QPushButton('3'), 3, 2, 1, 1)
-        self.add_btn(QPushButton('÷'), 3, 3, 1, 1)
+        self.add_btn(QPushButton('/'), 3, 3, 1, 1)
         self.add_btn(QPushButton(''), 3, 4, 1, 1)
 
         self.add_btn(QPushButton('.'), 4, 0, 1, 1)
         self.add_btn(QPushButton('0'), 4, 1, 1, 1)
-        self.add_btn(QPushButton(''), 4, 2, 1, 1)
-        self.add_btn(QPushButton('x'), 4, 3, 1, 1)
-        self.add_btn(QPushButton('='), 4, 4, 1, 1)
+        self.add_btn(QPushButton('**'), 4, 2, 1, 1)
+        self.add_btn(QPushButton('*'), 4, 3, 1, 1)
+        self.add_btn(
+            QPushButton('='), 4, 4, 1, 1,
+            self.eval_equal,
+            'background: #008000; color: white; font-weight: bold; border: none; border-radius: 5px'
+        )
 
         self.display.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)  # o QSizePolicy serve para expandir
         # os botões automaticamente
 
         self.setCentralWidget(self.cw)
 
-    def add_btn(self, btn, row, col, rowspan, colspan, func=None):
+    def add_btn(self, btn, row, col, rowspan, colspan, func=None, style=None):
         self.grid.addWidget(btn, row, col, rowspan, colspan)
+        btn.setStyleSheet('font-size: 20px; border: 1px solid #c0c0c0; border-radius: 5px')
 
         if not func:
             btn.clicked.connect(
@@ -69,8 +76,19 @@ class Calculadora(QMainWindow):
         else:
             btn.clicked.connect(func)
 
-        btn.setStyleSheet('font-size: 20px')
+        if style:
+            btn.setStyleSheet('font-size: 20px;' + style)
+
         btn.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+
+    def eval_equal(self):
+        try:
+            self.display.setText(
+                str(eval(self.display.text()))
+            )
+
+        except Exception as e:
+            self.display.setText('Operação inválida')
 
 
 if __name__ == '__main__':
